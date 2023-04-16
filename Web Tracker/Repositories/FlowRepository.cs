@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebTracker.Models;
-using SignalRCheck;
+using WebTracker.Models;
 
 namespace WebTracker.Repositories
 {

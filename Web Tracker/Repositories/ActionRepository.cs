@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SignalRCheck;
 using Microsoft.EntityFrameworkCore;
 using WebTracker.Repositories;
+using WebTracker.Models;
 
 namespace WebTracker.Repositories
 {

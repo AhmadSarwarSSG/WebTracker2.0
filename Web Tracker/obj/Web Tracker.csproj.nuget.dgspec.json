@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj": {}
+    "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Safe\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj": {
+    "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Safe\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj",
+        "projectUniqueName": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Safe\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj",
         "projectName": "Web Tracker",
-        "projectPath": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj",
+        "projectPath": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Safe\\Web-Tracker-V2.0\\Web Tracker\\Web Tracker.csproj",
         "packagesPath": "C:\\Users\\AhmadSarwarSSG\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Web-Tracker-V2.0\\Web Tracker\\obj\\",
+        "outputPath": "C:\\Users\\AhmadSarwarSSG\\Desktop\\Proj\\Safe\\Web-Tracker-V2.0\\Web Tracker\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\AhmadSarwarSSG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -72,6 +77,10 @@
               "target": "Package",
               "version": "[7.0.1, )"
             },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.17.0, )"
+            },
             "Remote.Linq.Newtonsoft.Json": {
               "target": "Package",
               "version": "[7.1.0, )"
@@ -96,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

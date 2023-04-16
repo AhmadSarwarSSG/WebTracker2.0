@@ -1,0 +1,144 @@
+:root{
+    --light-text-color: rgb(163, 174, 208);
+    --dark-text-color: rgb(43, 54, 116);
+    --button-background: rgb(244, 247, 254);
+    --button-background-dark: rgb(67, 24, 255);
+}
+*{
+    font-family: 'DM Sans';
+}
+#signup{
+}
+#signup .container-fluid{
+    height: 100%;
+}
+#signup .main-row {
+    height: 100vh;
+}
+#signup #col-1{
+    height: 100vh;
+}
+#signup #col-2{
+    background-image: url("Background 5.4.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    border-bottom-left-radius: 80px;
+}
+#signup #vertical{
+    align-items: center;
+    justify-content: space-between;
+    width: 65%;
+    margin: auto;
+}
+#signup #btn-text{
+    vertical-align: middle;
+}
+#signup hr{
+    vertical-align: middle;
+    display: inline-block;
+    width: 43%;
+}
+#signup #or{
+    display: inline-block;
+    width: 10%;
+}
+#signup #keep-logged{
+    display: inline-block;
+    color: var(--dark-text-color);
+}
+#signup #forget {
+    display: inline-block;
+    color: var(--button-background-dark);
+}
+#signup #back{
+    color: var(--light-text-color);
+}
+#signup #main-heading{
+    color: var(--dark-text-color);
+    font-size: 40px;
+    font-weight: bold;
+}
+#signup #sign-info{
+    color: var(--light-text-color);
+}
+#signup #google-signin{
+    background-color: var(--button-background);
+    border: 1px solid var(--button-background);
+}
+#signup label{
+    color: var(--dark-text-color);
+}
+#signup #signin-btn{
+    background-color: var(--button-background-dark);
+    color: white;
+    border: 1px solid var(--button-background-dark);
+    border-radius: 10px;
+}
+#signup #register{
+    color: var(--dark-text-color);
+}
+#signup #create-btn{
+    color: var(--button-background-dark);
+}
+#signup #copyright{
+    color: var(--light-text-color);
+    font-size: 12px;
+}
+#signup .form-inp {
+    border-radius: 10px;
+    border: 1px solid var(--light-text-color);
+}
+#signup .form-inp::placeholder {
+    color: var(--light-text-color);
+}
+
+#signup #content{
+    color: white;
+    border: 1px solid white;
+    border-radius: 15px;
+    width: fit-content;
+    margin: auto;
+}
+#signup #menu{
+    list-style-type: none;
+    color: white;
+    font-size: 12px;
+}
+#signup #menu li{
+    display: inline-block;
+}
+#signup #menu-s {
+    display: none;
+    list-style-type: none;
+    color: var(--light-text-color);
+    font-size: 12px;
+}
+
+#signup #menu-s li {
+    display: inline-block;
+}
+
+@media only screen and (max-width: 576px) {
+    #signup #menu-s {
+        display: block;
+        list-style-type: none;
+        color: var(--light-text-color);
+        font-size: 12px;
+    }
+    #signup #menu {
+        display: none;
+    }
+    #signup #vertical{
+        align-items: center;
+        justify-content: center;
+        width: 85%;
+        margin: auto;
+    }
+    #signup #col-1{
+        height: 100%;
+    }
+    #signup #col-2{
+        border-bottom-left-radius: 0px;
+    }
+}

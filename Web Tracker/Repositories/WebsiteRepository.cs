@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebTracker.Models;
-using SignalRCheck;
 using Microsoft.EntityFrameworkCore;
+using WebTracker.Models;
 
 namespace WebTracker.Repositories
 {
@@ -93,13 +93,14 @@ namespace WebTracker.Repositories
             return website;
         } 
         
-        public async Task<int> GetWebsiteIdByName(string website)
+        public int GetWebsiteIdByName(string website)
         {
             Console.WriteLine("Getting Website of name = " + website);
-            var web = await _context.Websites.FirstOrDefaultAsync(w => w.Web == website);
+            var web = _context.Websites.FirstOrDefault(w => w.Web == website);
+            
             if(web != null)
             {
-                Console.WriteLine("Website of name = " + website + " returned id = " + web.WebsiteId);
+                Console.WriteLine("************* &&&&&&&  Website of name = " + website + " returned id = " + web.WebsiteId);
                 return web.WebsiteId;
             }
             Console.WriteLine("No Website Found of name = " + website);

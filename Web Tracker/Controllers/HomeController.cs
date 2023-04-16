@@ -27,61 +27,63 @@ namespace WebTracker.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.BInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5).GroupBy(u => u.Browser).Select(group => new
+            if(HttpContext.Request.Cookies["username"] !=null)
             {
-                country = group.Key,
-                value = group.Count(),
-            }).OrderBy(x => x.country).ToList();
-            ViewBag.DInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5).GroupBy(u => u.DeviceType).Select(group => new
-            {
-                name = group.Key,
-                value = group.Count(),
-            }).OrderBy(x => x.name).ToList();
-            ViewBag.OInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5).GroupBy(u => u.OS).Select(group => new
-            {
-                country = group.Key,
-                value = group.Count(),
-            }).OrderBy(x => x.country).ToList();
-            ViewBag.DAInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5).GroupBy(u => u.LastConnection.ToString("yyyy-MM-dd")).Select(group => new
-            {
-                date = group.Key,
-                value = group.Count(),
-            }).OrderBy(x => x.date).ToList();
-            ViewBag.AllUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5).Count();
-            ViewBag.NewUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5 && u.ReturningData.Year == 0001).Count();
-            ViewBag.RetUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == 5 && u.ReturningData.Year != 0001).Count();
-            var allactions = _actionRepository.GetAllActions();
-            var allflows = _flowRepository.GetAllFlows();
-            var allad = _userRepository.GetAddresses();
-            var allusers = _userRepository.GetAllUsers();
-            ViewBag.AInfo = allusers.Join(allad,
-                a => a.Address.AddressId,
-                b => b.AddressId,
-                (a, b) => new {
-                    a.WebsiteId,
-                    b.CountryName
-                }).Where(U => U.WebsiteId == 5).GroupBy(Address => Address.CountryName).Select(group => new
+                ViewBag.userinfo = HttpContext.Request.Cookies["username"];
+
+                int loggedInUserWebsiteId = int.Parse(HttpContext.Request.Cookies["loggedInUserWebsiteId"]);
+                Console.WriteLine("------&&&&&&& loggedInUserWebsiteId: " + loggedInUserWebsiteId);
+
+                ViewBag.BInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId).GroupBy(u => u.Browser).Select(group => new
+                {
+                    country = group.Key,
+                    value = group.Count(),
+                }).OrderBy(x => x.country).ToList();
+                ViewBag.DInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId).GroupBy(u => u.DeviceType).Select(group => new
                 {
                     name = group.Key,
                     value = group.Count(),
                 }).OrderBy(x => x.name).ToList();
-            ViewBag.actionsCount = allactions
-                .Join(allflows, p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
-                .Join(allusers, pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
-                .Where(puc => puc.c.WebsiteId == 5).Count();
+                ViewBag.OInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId).GroupBy(u => u.OS).Select(group => new
+                {
+                    country = group.Key,
+                    value = group.Count(),
+                }).OrderBy(x => x.country).ToList();
+                ViewBag.DAInfo = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId).GroupBy(u => u.LastConnection.ToString("yyyy-MM-dd")).Select(group => new
+                {
+                    date = group.Key,
+                    value = group.Count(),
+                }).OrderBy(x => x.date).ToList();
+                ViewBag.AllUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId).Count();
+                ViewBag.NewUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId && u.ReturningData.Year == 0001).Count();
+                ViewBag.RetUsers = _userRepository.GetAllUsers().Where(u => u.WebsiteId == loggedInUserWebsiteId && u.ReturningData.Year != 0001).Count();
+                var allactions = _actionRepository.GetAllActions();
+                var allflows = _flowRepository.GetAllFlows();
+                var allad = _userRepository.GetAddresses();
+                var allusers = _userRepository.GetAllUsers();
+                ViewBag.AInfo = allusers.Join(allad,
+                    a => a.Address.AddressId,
+                    b => b.AddressId,
+                    (a, b) => new {
+                        a.WebsiteId,
+                        b.CountryName
+                    }).Where(U => U.WebsiteId == loggedInUserWebsiteId).GroupBy(Address => Address.CountryName).Select(group => new
+                    {
+                        name = group.Key,
+                        value = group.Count(),
+                    }).OrderBy(x => x.name).ToList();
+                ViewBag.actionsCount = allactions
+                    .Join(allflows, p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
+                    .Join(allusers, pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
+                    .Where(puc => puc.c.WebsiteId == loggedInUserWebsiteId).Count();
 
-            return View();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

@@ -26,109 +26,143 @@ namespace SignalR_Check.Controllers
         }
         public IActionResult Index()
         {
-            var flow = _flowDataRepository.GetAllFlowDatas()
-                .Join(_flowRepository.GetAllFlows(), p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
-                .Join(_userRepository.GetAllUsers(), pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
-                .Where(puc => puc.c.WebsiteId == 5).Select(puc => new { puc.p.Page, puc.p.FlowId}).ToList();
-            List<int> uniqnum=flow.Select(u=>u.FlowId).Distinct().ToList();
-            List<string> contFlows = new List<string>();
-            string cf = "";
-            foreach (var f in uniqnum)
+            if (HttpContext.Request.Cookies["username"] != null)
             {
-                foreach (var fd in flow)
+                ViewBag.userinfo = HttpContext.Request.Cookies["username"];
+                int loggedInUserWebsiteId = int.Parse(HttpContext.Request.Cookies["loggedInUserWebsiteId"]);
+
+                var flow = _flowDataRepository.GetAllFlowDatas()
+                    .Join(_flowRepository.GetAllFlows(), p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
+                    .Join(_userRepository.GetAllUsers(), pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
+                    .Where(puc => puc.c.WebsiteId == loggedInUserWebsiteId).Select(puc => new { puc.p.Page, puc.p.FlowId }).ToList();
+                List<int> uniqnum = flow.Select(u => u.FlowId).Distinct().ToList();
+                List<string> contFlows = new List<string>();
+                string cf = "";
+                foreach (var f in uniqnum)
                 {
-                    if (fd.FlowId == f)
+                    foreach (var fd in flow)
                     {
-                        if (fd.Page == "/")
+                        if (fd.FlowId == f)
                         {
-                            cf = cf + "Landing Page" + " ➜ ";
-                        }
-                        else
-                        {
-                            cf = cf + fd.Page + " ➜ ";
-                        }
-                    }
-                }
-                contFlows.Add(cf);
-                cf = "";
-            }
-            ViewBag.Flows = contFlows;
-            ViewBag.FlowIDs = uniqnum;
-            var Action = _actionRepository.GetAllActions()
-                .Join(_flowRepository.GetAllFlows(), p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
-                .Join(_userRepository.GetAllUsers(), pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
-                .Where(puc => puc.c.WebsiteId == 5).Select(puc => new { puc.p.Page, puc.p.FlowId, puc.p.Type,puc.p.Content}).ToList();
-            List<string> uniqpage = Action.Select(u => u.Page).Distinct().ToList();
-            List<string> contActions = new List<string>();
-            List<List<string>> pageactions=new List<List<string>>();
-            string pc = "";
-            foreach(var f in uniqnum)
-            {
-                List<string> list = new List<string>();
-                foreach (var p in uniqpage)
-                {
-                    bool first = true;
-                    string temp = pc;
-                    foreach(var a in Action)
-                    {
-                        if(a.FlowId==f && a.Page==p)
-                        {
-                            if (a.Content=="/")
+                            if (fd.Page == "/")
                             {
-                                if (first)
-                                {
-                                    first=false;
-                                }
-                                pc = pc + a.Type + "(" + "Landing Page" + ") ➜ ";
+                                cf = cf + "Landing Page" + " ➜ ";
                             }
                             else
                             {
-                                if (first)
-                                {
-                                    first = false;
-                                }
-                                pc = pc + a.Type + "(" + a.Content + ") ➜ ";
+                                cf = cf + fd.Page + " ➜ ";
                             }
                         }
                     }
-                    if(pc!=temp)
-                    {
-                        list.Add(pc);
-                    }
+                    contFlows.Add(cf);
+                    cf = "";
                 }
-                pageactions.Add(list);
-                //contActions.Add(pc);
-                pc = "";
-            }
-            ViewBag.Actions = pageactions;
-            ViewBag.pages = uniqpage;
-            List<FlowSummary> flows = _summaryData.GetAllFlows();
-            foreach(var f in flows)
-            {
-                string finalFlow = "";
-                for(int i=0; i < f.FlowSummed.Length; i++)
+                ViewBag.Flows = contFlows;
+                ViewBag.FlowIDs = uniqnum;
+                var Action = _actionRepository.GetAllActions()
+                    .Join(_flowRepository.GetAllFlows(), p => p.FlowId, u => u.FlowId, (p, u) => new { p, u })
+                    .Join(_userRepository.GetAllUsers(), pu => pu.u.UserId, c => c.UserId, (pu, c) => new { pu.p, pu.u, c })
+                    .Where(puc => puc.c.WebsiteId == loggedInUserWebsiteId).Select(puc => new { puc.p.Page, puc.p.FlowId, puc.p.Type, puc.p.Content }).ToList();
+                List<string> uniqpage = Action.Select(u => u.Page).Distinct().ToList();
+                List<string> contActions = new List<string>();
+                List<List<string>> pageactions = new List<List<string>>();
+                string pc = "";
+                foreach (var f in uniqnum)
                 {
-                    if (f.FlowSummed[i] == '>')
+                    List<string> list = new List<string>();
+                    foreach (var p in uniqpage)
                     {
-                        finalFlow += "➜";
+                        bool first = true;
+                        string temp = pc;
+                        foreach (var a in Action)
+                        {
+                            if (a.FlowId == f && a.Page == p)
+                            {
+                                if (a.Content == "/")
+                                {
+                                    if (first)
+                                    {
+                                        first = false;
+                                    }
+                                    pc = pc + a.Type + "(" + "Landing Page" + ") ➜ ";
+                                }
+                                else
+                                {
+                                    if (first)
+                                    {
+                                        first = false;
+                                    }
+                                    pc = pc + a.Type + "(" + a.Content + ") ➜ ";
+                                }
+                            }
+                        }
+                        if (pc != temp)
+                        {
+                            list.Add(pc);
+                        }
                     }
-                    else if(i==f.FlowSummed.Length-1 && f.FlowSummed[i] == '/')
-                    {
-                        finalFlow += "LandingPage";
-                    }
-                    else if (f.FlowSummed[i]=='/' && f.FlowSummed[i+1]=='>')
-                    {
-                        finalFlow += "LandingPage";
-                    }
-                    else
-                    {
-                        finalFlow += f.FlowSummed[i];
-                    }
+                    pageactions.Add(list);
+                    //contActions.Add(pc);
+                    pc = "";
                 }
-                f.FlowSummed = finalFlow;
+                ViewBag.Actions = pageactions;
+                ViewBag.pages = uniqpage;
+                List<FlowSummary> flows = _summaryData.GetAllFlows(loggedInUserWebsiteId);
+                foreach (var f in flows)
+                {
+                    string finalFlow = "";
+                    for (int i = 0; i < f.FlowSummed.Length; i++)
+                    {
+                        if (f.FlowSummed[i] == '>')
+                        {
+                            finalFlow += "➜";
+                        }
+                        else if (i == f.FlowSummed.Length - 1 && f.FlowSummed[i] == '/')
+                        {
+                            finalFlow += "LandingPage";
+                        }
+                        else if (f.FlowSummed[i] == '/' && f.FlowSummed[i + 1] == '>')
+                        {
+                            finalFlow += "LandingPage";
+                        }
+                        else
+                        {
+                            finalFlow += f.FlowSummed[i];
+                        }
+                    }
+                    f.FlowSummed = finalFlow;
+                }
+                ViewBag.Summary = flows;
+                List<ActionSummary> Actions = _summaryData.GetAllActions(loggedInUserWebsiteId);
+                foreach (var action in Actions)
+                {
+                    string finalFlow = "";
+                    for (int i = 0; i < action.ActionSummed.Length; i++)
+                    {
+                        if (action.ActionSummed[i] == '>')
+                        {
+                            finalFlow += "➜";
+                        }
+                        else if (action.ActionSummed[i] == '/' && (action.ActionSummed[i + 1] == '[' || action.ActionSummed[i + 1] == ')'))
+                        {
+                            finalFlow += "LandingPage";
+                        }
+                        else
+                        {
+                            finalFlow += action.ActionSummed[i];
+                        }
+                    }
+                    action.ActionSummed = finalFlow;
+
+                }
+                ViewBag.ActionSummary = Actions;
+                return View();
             }
-            ViewBag.Summary = flows;
-            return View();
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
         }
     }
 }

@@ -1,24 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
 }
+@*<p id="test_id"></p>*@
 <div class="wrapper">
-  <div class="content-wrapper">
+    <div class="content-wrapper" style="margin-top: 0px;">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard</h1>
-          </div><!-- /.col -->
+            <h1>Dashboard</h1>
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
+              <li class="breadcrumb-item active">Website Flows</li>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
+          </div>
+        </div>
       </div><!-- /.container-fluid -->
-    </div>
+    </section>
     <!-- /.content-header -->
 
     <!-- Main content -->
@@ -32,7 +33,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Total Visitors</span>
-                <span class="info-box-number">@ViewBag.AllUsers</span>
+                <span id="totalvisitors" class="info-box-number">@ViewBag.AllUsers</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -45,7 +46,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">New Visitors</span>
-                <span class="info-box-number">@ViewBag.NewUsers</span>
+                <span id="newvisitors" class="info-box-number">@ViewBag.NewUsers</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -54,7 +55,7 @@
           <!-- /.col -->
 
           <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
+          
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
@@ -62,7 +63,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Returning Visitors</span>
-                <span class="info-box-number">@ViewBag.RetUsers</span>
+                <span id="returningvisitors" class="info-box-number">@ViewBag.RetUsers</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -75,7 +76,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Actions</span>
-                                    <span class="info-box-number">@ViewBag.actionsCount</span>
+                                    <span id="actionscount" class="info-box-number">@ViewBag.actionsCount</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -106,7 +107,7 @@
           <!-- /.col -->
         </div>
         <div class="row">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <!-- interactive chart -->
             <div class="card card-primary card-outline">
               <div class="card-header">
@@ -123,7 +124,7 @@
             <!-- /.card -->
 
           </div>
-          <div class="col-6">
+                    <div class="col-12 col-md-6">
             <!-- interactive chart -->
             <div class="card card-primary card-outline">
               <div class="card-header">
@@ -143,7 +144,7 @@
           <!-- /.col -->
         </div>
         <div class="row">
-          <div class="col-6">
+                    <div class="col-12 col-md-6">
             <!-- interactive chart -->
             <div class="card card-primary card-outline">
               <div class="card-header">
@@ -160,7 +161,7 @@
             <!-- /.card -->
 
           </div>
-          <div class="col-6">
+                    <div class="col-12 col-md-6">
             <!-- interactive chart -->
             <div class="card card-primary card-outline">
               <div class="card-header">
@@ -184,7 +185,8 @@
     <!-- /.content -->
   </div>
 </div>
-
+<script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/AutoUpdater.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
@@ -425,9 +427,7 @@
     { "id": "ZW", "name": "Zimbabwe", "value": 0, polygonTemplate: { fill: colors.getIndex(2) } }
   ];
   var d = @Html.Raw(Json.Serialize(ViewBag.AInfo));
-  console.log(d.length);
   for(var i=0; i<d.length; i++){
-      console.log(d)
       var v=data.findIndex(obj=>obj.name==d[i].name+"");
       data[v].value=parseInt(d[i].value);
   }
@@ -477,9 +477,80 @@
   
   // Make stuff animate on load
   chart.appear(1000, 100);
+  connection.on("RegionData", (regiondata) => {
+    var d2 = regiondata;
+    console.log(d2);
+    console.log(data);
+    for(var i=0; i<d2.length; i++){
+      var v=data.findIndex(obj=>obj.name==d2[i].name+"");
+      data[v].value=parseInt(d2[i].value);
+    }
+    for (var i = 0; i < data.length; i++) {
+        var value = data[i].value;
+    
+        if (value < valueLow) {
+      
+            valueLow = value;
+    
+        }
+    
+        if (value > valueHigh) {
+      
+            valueHigh = value;
+    
+        }
   
-  }); // end am5.ready()
-  </script>
+    }
+  
+  
+    // radius in degrees
+  
+    var minRadius = 0.5;
+  
+    var maxRadius = 5;
+  
+    // Create circles when data for countries is fully loaded.
+        circleSeries.data.clear();
+        
+        for (var i = 0; i < data.length; i++) {
+            
+            var dataContext = data[i];
+            
+            var countryDataItem = polygonSeries.getDataItemById(dataContext.id);
+      
+            var countryPolygon = countryDataItem.get("mapPolygon");
+  
+      
+            var value = dataContext.value;
+  
+      
+            var radius = minRadius + maxRadius * (value - valueLow) / (valueHigh - valueLow);
+  
+      
+            if (countryPolygon) {
+        
+                var geometry = am5map.getGeoCircle(countryPolygon.visualCentroid(), radius);
+        
+                circleSeries.data.push({
+          
+                    name: dataContext.name,
+          
+                    value: dataContext.value,
+          
+                    polygonTemplate: dataContext.polygonTemplate,
+          
+                    geometry: geometry
+        
+                });
+      
+            }
+    
+        }
+  
+  });
+  
+}); // end am5.ready()
+</script>
 <script>
 am5.ready(function() {
 
@@ -601,8 +672,12 @@ chart.set("scrollbarX", am5.Scrollbar.new(root, {
 // Make stuff animate on load
 // https://www.amcharts.com/docs/v5/concepts/animations/
 chart.appear(1000, 100);
-
+connection.on("VisitorData", (visitordata) => {
+    var dataupdated = visitordata;
+    series.data.setAll(dataupdated);
+});
 }); // end am5.ready()
+
 </script>
 <script>
     am5.ready(function() {
@@ -690,7 +765,11 @@ chart.appear(1000, 100);
     // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
     chart.appear(1000, 100);
-    
+    connection.on("BroswerData", (browserdata) => {
+        var dataupdated = browserdata;
+        xAxis.data.setAll(dataupdated);
+        series.data.setAll(dataupdated);
+    });
     }); // end am5.ready()
     </script>  
     <script>
@@ -771,7 +850,6 @@ chart.appear(1000, 100);
       return chart.get("colors").getIndex(series.columns.indexOf(target));
     });
     var data = @Html.Raw(Json.Serialize(ViewBag.DInfo));
-    
     series.bullets.push(function() {
       return am5.Bullet.new(root, {
         locationY: 1,
@@ -797,7 +875,11 @@ chart.appear(1000, 100);
     // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
     chart.appear(1000, 100);
-    
+    connection.on("DeviceData", (devicedata) => {
+        var dataupdated = devicedata;
+        xAxis.data.setAll(dataupdated);
+        series.data.setAll(dataupdated);
+    });
     }); // end am5.ready()
     </script>
     <script>
@@ -891,6 +973,10 @@ chart.appear(1000, 100);
       // https://www.amcharts.com/docs/v5/concepts/animations/
       series.appear(1000);
       chart.appear(1000, 100);
-      
+      connection.on("OSData", (osdata) => {
+          var dataupdated = osdata; 
+          xAxis.data.setAll(dataupdated);
+          series.data.setAll(dataupdated);
+      });
       }); // end am5.ready()
       </script>

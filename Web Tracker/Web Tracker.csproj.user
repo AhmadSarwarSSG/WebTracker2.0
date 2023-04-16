@@ -5,5 +5,10 @@
     <View_SelectedScaffolderCategoryPath>root/Common/MVC/View</View_SelectedScaffolderCategoryPath>
     <Controller_SelectedScaffolderID>MvcControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/MVC/Controller</Controller_SelectedScaffolderCategoryPath>
+    <ActiveDebugProfile>SignalR_Check</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\AhmadSarwarSSG\Desktop\Proj\Safe\Web-Tracker-V2.0\Web Tracker\Properties\PublishProfiles\registry.hub.docker.com_ahmadsarwarssf.pubxml</NameOfLastUsedPublishProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

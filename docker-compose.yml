@@ -1,0 +1,33 @@
+version: '3.4'
+
+networks:
+  webtrackerapp:
+
+services:
+  webtrackerdb:
+    container_name: webtracker-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=8xScope@
+    networks:
+      - webtrackerapp
+  webtracker:
+    container_name: webtracker-app
+    image: ${DOCKER_REGISTRY-}webtracker
+    build:
+      context: .
+      dockerfile: "Web Tracker/Dockerfile"
+    ports:
+      - 8001:80
+    depends_on:
+      - webtrackerdb
+    environment:
+      - DB_HOST=webtrackerdb
+      - DB_NAME=webtrackerdb
+      - DB_SA_PASSWORD=8xScope@ 
+    networks:
+      - webtrackerapp

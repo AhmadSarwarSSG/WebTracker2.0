@@ -1,0 +1,102 @@
+name: dockercompose4775573046379492076
+services:
+  webtracker:
+    build:
+      context: C:\Users\AhmadSarwarSSG\Desktop\Proj\Safe\Web-Tracker-V2.0
+      dockerfile: Web Tracker/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Web Tracker
+      target: base
+    container_name: webtracker-app
+    depends_on:
+      webtrackerdb:
+        condition: service_started
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: http://+:80
+      DB_HOST: webtrackerdb
+      DB_NAME: webtrackerdb
+      DB_SA_PASSWORD: 8xScope@
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages
+    image: webtracker:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages
+        --additionalProbingPath /root/.nuget/fallbackpackages  ""'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      webtrackerapp: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 80
+      published: "8001"
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\Desktop\Proj\Safe\Web-Tracker-V2.0\Web Tracker
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /root/.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\.nuget\packages\
+      target: /root/.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\AhmadSarwarSSG\Desktop\Proj\Safe\Web-Tracker-V2.0
+      target: /src
+      bind:
+        create_host_path: true
+  webtrackerdb:
+    container_name: webtracker-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: 8xScope@
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      webtrackerapp: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "8002"
+      protocol: tcp
+networks:
+  webtrackerapp:
+    name: dockercompose4775573046379492076_webtrackerapp

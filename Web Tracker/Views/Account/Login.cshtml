@@ -1,0 +1,94 @@
+﻿@model SignalR_Check.ViewModels.LoginViewModel
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/Signup.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src='https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.5/dist/umd/popper.min.js'
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=DM Sans' rel='stylesheet'>
+<section id="signup">
+        <div class="container-fluid">
+            <div class="row flex-column-reverse flex-md-row main-row">
+                <div class="col-md-6 col-12 mt-5 mt-md-1" id="col-1">
+                    <div class="row flex-column" id="vertical">
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h1 id="main-heading">Sign In</h1>
+                                <p id="sign-info">Enter your username and password to sign in!</p>
+                                @*<button class="btn w-100" id="google-signin"><img src="~/Images/Google.svg"><span
+                                        id="btn-text" class="ms-2">Sign in with Google</span></button>*@
+                                @*<hr>
+                                <p id="or" class="text-center mt-3">or</p>
+                                <hr>*@
+                                
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <form method="post">
+                                    <label asp-for="Username" class="w-100 mb-1">Username</label>
+                                    <input asp-for="Username" type="text" class="form-inp w-100 py-2 px-2" id="email"
+                                        placeholder="Ahmad Sarwar">
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                                <br />
+                                    <label asp-for="Password" class="form-label" class="w-100 mb-1 mt-2">Password</label>
+                                    <input asp-for="Password" type="password" class="form-inp w-100 py-2 px-2" id="Password"
+                                        placeholder="Password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+
+                                <button type="submit" class="w-100 py-2 mt-3" value="Sign In" id="signin-btn">Log In</button>
+                                <p id="register" class="mt-2">
+                                    Not registered yet? 
+                                    <a asp-action="Register" asp-controller="Account">
+                                        <span id="create-btn">
+                                            Create an Account
+                                    </span>
+                                    </a>
+                                </p>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-12 text-center text-md-start">
+                                <p id="copyright">© 2022 Web Tracker. All Rights Reserved. Made by Ahmad!</p>
+                            </div>
+                            <div class="col-12">
+                                <ul id="menu-s" class="text-center px-0">
+                                    <li class="me-1">Facebook</li>
+                                    <li class="mx-1">Twitter</li>
+                                    <li class="mx-1">LinkedIn</li>
+                                    <li class="ms-1">Gmail</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12" id="col-2">
+                    <div class="d-flex flex-column h-100">
+                        <div class="text-center mt-md-auto mt-4" id="col-f">
+                            <img src="~/Images/Horizon Logo.png" id="logo" class="w-25">
+                        </div>
+                        <div class="mt-5">
+                            <div id="content" class="px-5 py-2 text-center">
+                                <p>Track your Website Users</p>
+                                <h4 class="fw-bold">WebTracker.com</h4>
+                            </div>
+                        </div>
+                        <div class="mt-md-auto mt-4 mb-md-0 mb-5" id="col-l">
+                            <ul id="menu" class="text-center">
+                            <li class="mx-3">Facebook</li>
+                            <li class="mx-3">Twitter</li>
+                            <li class="mx-3">LinkedIn</li>
+                            <li class="ms-3">Gmail</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

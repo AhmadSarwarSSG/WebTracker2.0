@@ -4,7 +4,7 @@
 @{
 }
 <div class="wrapper">
-  <div class="content-wrapper">
+    <div class="content-wrapper" style="margin-top: 0px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -29,7 +29,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Summary Table</h3>
+                                    <h3 class="card-title">Flow Summary Table</h3>
 
                                 </div>
                                 <!-- /.card-header -->
@@ -42,7 +42,7 @@
                                                 <th>Count</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="SumaryTable">
                                             @for (int i = 0; i < ViewBag.Summary.Count; i++)
                                             {
                                                 <tr>
@@ -59,6 +59,40 @@
                             <!-- /.card -->
                         </div>
                     </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Action Summary Table</h3>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0" style="height: 300px;">
+                                <table class="table table-head-fixed text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Action</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ActionSumaryTable">
+                                        @for (int i = 0; i < ViewBag.ActionSummary.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@(i + 1)</td>
+                                                <td>@ViewBag.ActionSummary[i].ActionSummed</td>
+                                                <td>@ViewBag.ActionSummary[i].Count</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
                     <!-- /.row -->
         <!-- /.row -->
                     <div class="row">
@@ -105,7 +139,7 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body table-responsive p-0" style="height: 300px;">
-                                    <table class="table table-head-fixed text-nowrap">
+                                    <table class="table table-head-fixed text-nowrap" id="actionflow">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -156,3 +190,5 @@
     <!-- /.content -->
   </div>
 </div>
+<script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/AutoUpdater.js"></script>
